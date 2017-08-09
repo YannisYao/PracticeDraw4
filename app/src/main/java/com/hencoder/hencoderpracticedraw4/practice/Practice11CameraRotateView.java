@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
@@ -37,8 +38,29 @@ public class Practice11CameraRotateView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        canvas.drawBitmap(bitmap, point1.x, point1.y, paint);
+        Matrix matrix = new Matrix();
+        //matrix.postTranslate(-300,0);
+        float left = point2.x;
+        float top = point2.y;
+        float right = point2.x+bitmap.getWidth();
+        float bottom = point2.y+ bitmap.getHeight();
+        float[] pointsSrc = {left,top,right,top,left,bottom,right,bottom};
+        float[] pointsDst = {left-100,top-50,right-60,top-50,left,bottom+80,right+150,bottom+80};
+        matrix.setPolyToPoly(pointsSrc,0,pointsDst,0,4);
+        matrix.postTranslate(-320,0);
+        canvas.save();
+        canvas.concat(matrix);
         canvas.drawBitmap(bitmap, point2.x, point2.y, paint);
+        canvas.restore();
+        matrix.reset();
+
+        matrix.preScale(0.35f,0.6f,point1.x+bitmap.getWidth()/2,point1.y+bitmap.getHeight()/2);
+        matrix.preSkew(0,-0.4f);
+        canvas.save();
+        canvas.concat(matrix);
+        canvas.drawBitmap(bitmap, point1.x, point1.y, paint);
+        canvas.restore();
+
+
     }
 }

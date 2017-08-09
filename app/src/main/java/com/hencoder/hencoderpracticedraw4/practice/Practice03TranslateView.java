@@ -42,7 +42,7 @@ public class Practice03TranslateView extends View {
         canvas.drawBitmap(bitmap, point1.x, point1.y, paint);
         canvas.restore();
         canvas.save();
-        canvas.translate(200,100);
+        canvas.translate(200,100);//平移画布即平移坐标原点
         canvas.drawBitmap(bitmap, point2.x, point2.y, paint);
         canvas.restore();
     }

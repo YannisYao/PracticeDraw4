@@ -48,7 +48,7 @@ public class Practice02ClipPathView extends View {
         canvas.restore();
         path2.addCircle(point2.x+bitmap.getWidth()/2+40,point2.y+bitmap.getHeight()/2+45,bitmap.getHeight()/2-10,Path.Direction.CW);
         canvas.save();
-        canvas.clipPath(path2, Region.Op.DIFFERENCE);
+        canvas.clipPath(path2, Region.Op.DIFFERENCE);//取源画布反向路径
         canvas.drawBitmap(bitmap, point2.x, point2.y, paint);
         canvas.restore();
     }

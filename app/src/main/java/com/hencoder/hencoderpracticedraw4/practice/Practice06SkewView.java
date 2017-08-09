@@ -12,6 +12,12 @@ import android.view.View;
 
 import com.hencoder.hencoderpracticedraw4.R;
 
+/**
+ *错切概念解释，错切后的坐标 x = x0 + b*y0
+ * y = y0 + d*x0;
+ * b,d分别是想x,y轴的错切系数（即错切角度的tan值）
+ * 当b为0时，图形的x轴坐标不变，反之则反
+ */
 public class Practice06SkewView extends View {
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Bitmap bitmap;
@@ -37,8 +43,13 @@ public class Practice06SkewView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        canvas.save();
+        canvas.skew(0,0.5f);
         canvas.drawBitmap(bitmap, point1.x, point1.y, paint);
+        canvas.restore();
+        canvas.save();
+        canvas.skew(-0.5f,0);
         canvas.drawBitmap(bitmap, point2.x, point2.y, paint);
+        canvas.restore();
     }
 }
