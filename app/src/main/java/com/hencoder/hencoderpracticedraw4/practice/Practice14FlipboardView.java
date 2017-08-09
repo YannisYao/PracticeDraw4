@@ -15,6 +15,9 @@ import android.view.animation.LinearInterpolator;
 
 import com.hencoder.hencoderpracticedraw4.R;
 
+/**
+ * 此处翻页需要进行两部分的绘制，上部分不动的位置，下部分需要旋转的位置，动画的实质其实就是在执行期间不间断的调用setDegree（）方法
+ */
 public class Practice14FlipboardView extends View {
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Bitmap bitmap;
@@ -71,11 +74,20 @@ public class Practice14FlipboardView extends View {
         int centerY = getHeight() / 2;
         int x = centerX - bitmapWidth / 2;
         int y = centerY - bitmapHeight / 2;
-
+        //上部分的绘制
         canvas.save();
-
+        canvas.clipRect(0,0,getWidth(),centerY);
+        canvas.drawBitmap(bitmap, x, y, paint);
+        canvas.restore();
+        //下部分的绘制
+        canvas.save();
         camera.save();
         camera.rotateX(degree);
+        if(degree > 90){//旋转小于90度，绘制下部分，旋转大于90度绘制上部分，不然的话会出现图形的下部分被截掉的图形被转出来的情况
+            canvas.clipRect(0,0,getWidth(),centerY);
+        }else{
+            canvas.clipRect(0,centerY,getWidth(),getHeight());
+        }
         canvas.translate(centerX, centerY);
         camera.applyToCanvas(canvas);
         canvas.translate(-centerX, -centerY);
@@ -83,5 +95,8 @@ public class Practice14FlipboardView extends View {
 
         canvas.drawBitmap(bitmap, x, y, paint);
         canvas.restore();
+        /**
+         * 这里使用的整个canvas分两部分绘制，而不是把bitmap分两部分绘制，把bitmap分两部分绘制会出现图片圆角-直角-圆角的循环变化，目前还不知道原因
+         */
     }
 }

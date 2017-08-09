@@ -78,8 +78,9 @@ public class Practice13CameraRotateHittingFaceView extends View {
 
         camera.save();
         matrix.reset();
+        camera.setLocation(0,0,-15);
         camera.rotateX(degree);
-        camera.getMatrix(matrix);
+        camera.getMatrix(matrix);//计算当前Camera的变换矩阵，然后复制到传入的matrix中，跟applytocanvas有异曲同工
         camera.restore();
         matrix.preTranslate(-centerX, -centerY);
         matrix.postTranslate(centerX, centerY);
@@ -87,5 +88,11 @@ public class Practice13CameraRotateHittingFaceView extends View {
         canvas.concat(matrix);
         canvas.drawBitmap(bitmap, point.x, point.y, paint);
         canvas.restore();
+        /**pre是前乘，参数给出的矩阵乘以当前的矩阵。所以操作是在当前矩阵的最前面发生的
+                *   post是后乘，当前的矩阵乘以参数给出的矩阵。可以连续多次使用post，来完成所需的整个变换
+                *   set是直接设置Matrix的值，每次set一次，整个Matrix的数组都会变掉**/
+        /**
+         * 思索上述程序的执行顺序，已经试过85,86行顺序不能调整，目前还不知道是什么原因
+         */
     }
 }

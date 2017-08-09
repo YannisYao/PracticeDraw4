@@ -3,8 +3,8 @@ package com.hencoder.hencoderpracticedraw4.practice;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
@@ -38,29 +38,23 @@ public class Practice11CameraRotateView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Matrix matrix = new Matrix();
-        //matrix.postTranslate(-300,0);
-        float left = point2.x;
-        float top = point2.y;
-        float right = point2.x+bitmap.getWidth();
-        float bottom = point2.y+ bitmap.getHeight();
-        float[] pointsSrc = {left,top,right,top,left,bottom,right,bottom};
-        float[] pointsDst = {left-100,top-50,right-60,top-50,left,bottom+80,right+150,bottom+80};
-        matrix.setPolyToPoly(pointsSrc,0,pointsDst,0,4);
-        matrix.postTranslate(-320,0);
+        Camera camera = new Camera();
         canvas.save();
-        canvas.concat(matrix);
-        canvas.drawBitmap(bitmap, point2.x, point2.y, paint);
-        canvas.restore();
-        matrix.reset();
 
-        matrix.preScale(0.35f,0.6f,point1.x+bitmap.getWidth()/2,point1.y+bitmap.getHeight()/2);
-        matrix.preSkew(0,-0.4f);
-        canvas.save();
-        canvas.concat(matrix);
+        camera.save();
+        camera.setLocation(0,0,-10);//x,y,z坐标，单位为英寸，Android固定1英寸为72像素，默认位置为(0,0-,8);
+        camera.rotateX(30);//绕X轴旋转30度
+        camera.applyToCanvas(canvas);
+        camera.restore();
         canvas.drawBitmap(bitmap, point1.x, point1.y, paint);
         canvas.restore();
-
-
+        canvas.save();
+        camera.save();
+        canvas.translate(0,90);
+        camera.rotateY(30);
+        camera.applyToCanvas(canvas);
+        camera.restore();
+        canvas.drawBitmap(bitmap, point2.x, point2.y, paint);
+        canvas.restore();
     }
 }
